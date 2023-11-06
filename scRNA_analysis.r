@@ -5,14 +5,14 @@ library('Seurat')
 data_dir <- 'filtered_gene_bc_matrices/hg19'
 ### 读取 cellranger 生成的文件
 counts <- Read10X(data.dir = data_dir)
-### 创建 seurat 对象
+### 创建 seurat 对象   #################### 参数值得研究
 obj <- CreateSeuratObject(
   counts = counts,
   min.cells=1,
   project = "run_test"
   )
 
-
+#############################
 
 
 
