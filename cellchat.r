@@ -1,5 +1,6 @@
 rm(list=ls())
-setwd('D:/desk/志成单细胞')
+# 后续使用单细胞标准流程交付结果
+setwd('D:/desk/志成单细胞')  
 library('Seurat')
 library('dplyr')
 library('ggplot2')
