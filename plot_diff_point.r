@@ -38,7 +38,7 @@ obj = OESingleCell::ReadX(input = h5seurat_file, informat = 'h5seurat', verbose 
 # 将基因列表保存至变量 并与基因簇取交集
 genelist = read.table(genelist_file,header=F)
 genelist = genelist[,'V1']
-genelist = genelist[genelist %in% rownames(obj)]
+genelist = genelist[genelist %in% rownames(obj)]  # 后续添加大小写模糊匹配 result <- grep("an", words, ignore.case = TRUE)
 
 # 处理 group 输入数据
 groups = strsplit(groups,'group:|,',perl=T)[[1]]
