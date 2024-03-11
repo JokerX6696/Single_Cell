@@ -2,13 +2,16 @@ rm(list=ls())
 setwd('D:/desk/cmd')
 library('Seurat')
 library('pheatmap')
-gene = as.character(read.table('top20_sampleid_M51-vs-S33_genes.xls',header=T,sep='\t')$gene)
-obj = readRDS('data_ob_v3.rds')
+
 ################# 做别的参数改这里！
+rds='data_ob_v3'
 celltype='AT2'
 sample1="M51"
 sample2="S31"
+diff_gene_file='top20_sampleid_M51-vs-S33_genes.xls'
 ###########################################
+gene = as.character(read.table(diff_gene_file,header=T,sep='\t')$gene)
+obj = readRDS(rds)
 obj = subset(obj,subset=newcelltype==celltype & (sampleid == sample1 | sampleid == sample2))
 
 cell_order = c(rownames(obj@meta.data)[obj@meta.data$sampleid==sample1] ,rownames(obj@meta.data)[obj@meta.data$sampleid==sample2])
