@@ -65,7 +65,7 @@ for (celltype in ct) {
   ggsave(plot = p_list[[celltype]],filename = paste0(celltype,'.png'),width = 9,height = 6)
   ggsave(plot = p_list[[celltype]],filename = paste0(celltype,'.pdf'),width = 9,height = 6)
 }
-
+ 
 
 ################################################################################################
 
