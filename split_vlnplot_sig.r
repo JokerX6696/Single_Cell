@@ -1,3 +1,5 @@
+rm(list=ls())
+setwd('D:/desk/yly')
 #!/home/dongjiaoyang/miniconda3/envs/OESingleCell/bin/R
 #.libPaths(c("/home/dongjiaoyang/miniconda3/envs/OESingleCell/lib/R/library","/home/zhengfuxing/R/x86_64-conda-linux-gnu-library/4.0"))
 rm(list=ls())
@@ -7,7 +9,8 @@ library(gghalves)
 library(tidyverse)
 library(ggpubr)
 data_ob = readRDS('data_ob_v3.rds')#OESingleCell::ReadX(input = '../change_sampleid.h5seurat', informat = 'h5seurat', verbose = F)
-genelist=read.table('genelist.txt',header=T)[,1]
+data_ob = UpdateSeuratObject(data_ob)
+genelist=read.table('genelist.txt',header=T,sep='\t')[,1]
 genelist=genelist[genelist %in% rownames(data_ob)]
 GeomSplitViolin <- ggproto("GeomSplitViolin", GeomViolin,
                            draw_group = function(self, data, ..., draw_quantiles = NULL) {
@@ -16,7 +19,7 @@ GeomSplitViolin <- ggproto("GeomSplitViolin", GeomViolin,
                              newdata <- plyr::arrange(transform(data, x = if (grp %% 2 == 1) xminv else xmaxv), if (grp %% 2 == 1) y else -y)
                              newdata <- rbind(newdata[1, ], newdata, newdata[nrow(newdata), ], newdata[1, ])
                              newdata[c(1, nrow(newdata) - 1, nrow(newdata)), "x"] <- round(newdata[1, "x"])
-
+                             
                              if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
                                stopifnot(all(draw_quantiles >= 0), all(draw_quantiles <=
                                                                          1))
@@ -33,8 +36,8 @@ GeomSplitViolin <- ggproto("GeomSplitViolin", GeomViolin,
                            })
 for(gene in genelist){
   cells = colnames(data_ob)
-  value = as.numeric(data_ob@assays$RNA[gene,cells][1,])
-  clusters = data_ob@meta.data[cells,'clusters']
+  value = as.numeric(data_ob@assays$RNA@data[gene,cells])
+  clusters = data_ob@meta.data[cells,'new_celltype']
   sample = data_ob@meta.data[cells,'sampleid']
   data_new = data.frame(clusters=clusters,cell=cells,data=value,sample=sample)
   
@@ -74,20 +77,3 @@ for(gene in genelist){
   ggsave(paste0(gene,"_violin_plot.pdf"), height = 5, width =8)
   ggsave(paste0(gene,"_violin_plot.png"), height = 5, width =8)
 }
-####################### 分半提琴图 ####################
-
-# data <- read.table("draw.txt", sep = '\t',header = T)
-
-# data_new <- data %>% 
-#   pivot_longer(cols = !X, 
-#                names_to = "Samples", 
-#                values_to = "Values")
-
-# colnames(data_new)[1] <- "Genes"
-
-# data_new$group <- str_split(data_new$Samples, "_", simplify = T)[,2]
-
-# head(data_new)
-# data_new$Values <- log10(data_new$Values + 1)
-
-
