@@ -2,10 +2,8 @@
 float OE_Q_sqrt( float number )
 {
     long i;
-    float x2, y;
+    float y;
     int fix = 0;
-    const float threehalfs = 1.5F;
-    x2 = number * 0.5F;
     y  = number;
     i  = * ( long * ) &y;                       // evil floating point bit level hacking
     i  = 0x1fc00000 + fix + ( i >> 1 );               // what the fuck? 
