@@ -12,7 +12,7 @@ obj = rd(rds)
 info = read.delim(plot_data)
 ## 处理数据
 cells = info$Barcode
-info$x = obj@meta.data[match(obj@meta.data$rawbc,cells),x_z]
+info$x = obj@meta.data[match(cells,obj@meta.data$rawbc),x_z]
 df = info
 names(df)[3] = 'y'
 
