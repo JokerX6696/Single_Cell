@@ -45,7 +45,9 @@ sel = grepl(genelist,rownames(obj),ignore.case = TRUE)
 # 模糊匹配 忽略大小写！
 nomatch=genelist[! sapply(genelist, function(x) any(grepl(x, rownames(obj), ignore.case = TRUE)))]  # save 没有匹配到的基因
 write.table(file='gene_no_matched_list.txt',x=nomatch,row.names=F,col.names=F,quote=F) # 输出没有匹配到的基因
-genelist = genelist[sapply(genelist, function(x) any(grepl(x, rownames(obj), ignore.case = TRUE)))] # 模糊匹配 
+vec = c()
+for(i in genelist){temp=rownames(obj)[grepl(paste0('^',i,'$'),rownames(obj),ignore.case=T)];vec = c(vec,temp)}
+genelist = vec # 模糊匹配 
 
 # 处理 group 输入数据
 groups = strsplit(groups,'group:|,',perl=T)[[1]]
@@ -75,7 +77,7 @@ for(gp in groups){
     df=rbind(df1,df2)  
     df$new_celltype_space = gsub('_',' ',df$new_celltype)
     p=ggplot(df,aes(x=group,y=counts)) +                             
-    geom_jitter(aes(color=group),size = 0.5,width=0.4) +
+    geom_jitter(aes(color=group),size = 0.5,width=0.4,height = 0) +
     theme_bw() + 
     theme(panel.grid =element_blank()) +
     labs(x = "group", y = gene) + 
@@ -84,6 +86,7 @@ for(gp in groups){
     scale_color_manual(breaks=c(g1,g2),values=colors) + 
     sig(list(c(g1,g2)),"wilcox.test") 
     ggsave(p,filename=paste0('diff_plot/',gene,'_',g1,'_vs_',g2,'.png'),device='png',height=length(unique(obj@meta.data$new_celltype))) 
+    ggsave(p,filename=paste0('diff_plot/',gene,'_',g1,'_vs_',g2,'.pdf'),device='pdf',height=length(unique(obj@meta.data$new_celltype))) 
 }
 }
 
